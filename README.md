@@ -8,6 +8,9 @@
 
 FLAME combines a linear identity shape space (trained from 3800 scans of human heads) with an articulated neck, jaw, and eyeballs, pose-dependent corrective blendshapes, and additional global expression blendshapes. For details please about the model, please see the [scientific publication](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/400/paper.pdf) and the [supplementary video](https://youtu.be/36rPTkhiJTM).
 
+See also [FLAME PyTorch](https://github.com/soubhiksanyal/FLAME_PyTorch) or the [FLAME photometric optimization](https://github.com/HavenFeng/photometric_optimization) repositories.
+
+
 ### Content
 
 This repository demonstrates how to 
@@ -15,7 +18,8 @@ This repository demonstrates how to
 2) fit the 3D model to 2D landmarks
 3) fit the 3D model to 3D landmarks 
 4) fit the 3D model to registered 3D meshes
-5) how to generate templates for speech-driven facial animation ([VOCA](https://github.com/TimoBolkart/voca))
+5) sample the texture space
+6) how to generate templates for speech-driven facial animation ([VOCA](https://github.com/TimoBolkart/voca))
 
 ### Set-up
 
@@ -63,7 +67,7 @@ sudo apt-get install python-opengl
 
 ### Data
 
-Download the FLAME model and the texture space from [MPI-IS/FLAME](http://flame.is.tue.mpg.de/). You need to sign up and agree to the model license for access to the model and the data.<br/>
+Download the FLAME model and the MPI texture space from [MPI-IS/FLAME](http://flame.is.tue.mpg.de/). You need to sign up and agree to the model license for access to the model and the data. Further, download the [AlbedoMM (CVPR 2020)](https://github.com/waps101/AlbedoMM) texture space for FLAME.<br/>
 
 
 ### Demo
@@ -118,9 +122,14 @@ Note that this demo to date does not support registering arbitrary 3D face scans
 
 ##### Sample texture space
 
-This demo generates FLAME meshes with textures randomly sampled from the texture space.
+Two texture spaces are available for FLAME, the [MPI texture space](https://flame.is.tue.mpg.de/downloads) and [AlbedoMM](https://github.com/waps101/AlbedoMM). This demo generates FLAME meshes with textures randomly sampled from the MPI texture space (download [here](https://flame.is.tue.mpg.de/downloads))
 ```
-python sample_texture.py --model_fname './models/generic_model.pkl' --texture_fname './models/FLAME_texture.npz' --num_samples 5 --out_path './texture_samples'
+python sample_texture.py --model_fname './models/generic_model.pkl' --texture_fname './models/FLAME_texture.npz' --num_samples 5 --out_path './texture_samples_MPI'
+```
+
+Randomly sample textures from the [AlbedoMM](http://openaccess.thecvf.com/content_CVPR_2020/papers/Smith_A_Morphable_Face_Albedo_Model_CVPR_2020_paper.pdf) texture space (download  albedoModel2020_FLAME_albedoPart.npz [here](https://github.com/waps101/AlbedoMM/releases))
+```
+python sample_texture.py --model_fname './models/generic_model.pkl' --texture_fname './models/albedoModel2020_FLAME_albedoPart.npz' --num_samples 5 --out_path './texture_samples_AlbedoMM'
 ```
 
 ##### Generate VOCA template

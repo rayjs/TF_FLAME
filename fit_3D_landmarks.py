@@ -53,9 +53,9 @@ def fit_lmk3d(target_3d_lmks, model_fname, lmk_face_idx, lmk_b_coords, weights, 
 
         lmks = tf_get_model_lmks(tf_model, smpl.f, lmk_face_idx, lmk_b_coords)
         lmk_dist = tf.reduce_sum(tf.square(1000 * tf.subtract(lmks, target_3d_lmks)))
-        neck_pose_reg = tf.reduce_sum(tf.square(tf_pose[:3]))
-        jaw_pose_reg = tf.reduce_sum(tf.square(tf_pose[3:6]))
-        eyeballs_pose_reg = tf.reduce_sum(tf.square(tf_pose[6:]))
+        neck_pose_reg = tf.reduce_sum(tf.square(tf_pose[:,:3]))
+        jaw_pose_reg = tf.reduce_sum(tf.square(tf_pose[:,3:6]))
+        eyeballs_pose_reg = tf.reduce_sum(tf.square(tf_pose[:,6:]))
         shape_reg = tf.reduce_sum(tf.square(tf_shape))
         exp_reg = tf.reduce_sum(tf.square(tf_exp))
 
@@ -95,6 +95,7 @@ def run_3d_lmk_fitting():
 
     # Path of the landamrk embedding file into the FLAME surface
     flame_lmk_path = './data/flame_static_embedding.pkl'
+
     # 3D landmark file that should be fitted (landmarks must be corresponding with the defined FLAME landmarks)
     # see "img1_lmks_visualized.jpeg" or "see the img2_lmks_visualized.jpeg" for the order of the landmarks
     target_lmk_path = './data/landmark_3d.npy'
@@ -113,7 +114,7 @@ def run_3d_lmk_fitting():
     # Weight of the expression regularizer
     weights['expr']  = 1.0
     # Weight of the neck pose (i.e. neck rotationh around the neck) regularizer
-    weights['neck_pose'] = 100.0
+    weights['neck_pose'] = 1000.0
     # Weight of the jaw pose (i.e. jaw rotation for opening the mouth) regularizer
     weights['jaw_pose'] = 1.0
     # Weight of the eyeball pose (i.e. eyeball rotations) regularizer
